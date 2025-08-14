@@ -1,603 +1,352 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🧪</text></svg>">
-
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>🧪 ESP32 Dashboard Test</title>
+    <title>Simple ESP32 Test</title>
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🧪</text></svg>">
     <style>
         body {
             font-family: Arial, sans-serif;
-            max-width: 800px;
+            max-width: 600px;
             margin: 50px auto;
             padding: 20px;
-            background: #f5f5f5;
+            background: #f0f0f0;
         }
-        .card {
+        .box {
             background: white;
-            padding: 30px;
-            border-radius: 10px;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
-            margin-bottom: 20px;
-        }
-        .form-group {
-            margin-bottom: 15px;
-        }
-        .form-group label {
-            display: block;
-            margin-bottom: 5px;
-            font-weight: bold;
-        }
-        .form-group input {
-            width: 100%;
-            padding: 10px;
-            border: 1px solid #ddd;
-            border-radius: 5px;
-            box-sizing: border-box;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 8px;
+            border: 2px solid #ddd;
         }
         button {
             background: #4CAF50;
             color: white;
-            padding: 12px 20px;
+            padding: 10px 20px;
             border: none;
             border-radius: 5px;
             cursor: pointer;
-            margin-right: 10px;
-            margin-bottom: 10px;
+            margin: 5px;
         }
         button:hover {
             background: #45a049;
         }
-        .status {
+        input {
+            width: 100%;
+            padding: 8px;
+            margin: 5px 0;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            box-sizing: border-box;
+        }
+        .result {
+            background: #e7f3ff;
             padding: 10px;
             margin: 10px 0;
             border-radius: 5px;
-            font-weight: bold;
-        }
-        .success { background: #d4edda; color: #155724; }
-        .error { background: #f8d7da; color: #721c24; }
-        .info { background: #d1ecf1; color: #0c5460; }
-        .hidden { display: none; }
-        .device-card {
-            border: 2px solid #e0e0e0;
-            border-radius: 8px;
-            padding: 20px;
-            margin: 15px 0;
-        }
-        .device-title {
-            color: #4CAF50;
-            font-size: 1.3em;
-            margin-bottom: 10px;
-        }
-        .relay-grid {
-            display: grid;
-            grid-template-columns: repeat(4, 1fr);
-            gap: 10px;
-            margin-top: 15px;
-        }
-        .relay-btn {
-            padding: 15px 10px;
-            border: 2px solid #ddd;
-            border-radius: 5px;
-            cursor: pointer;
-            text-align: center;
-            transition: all 0.3s;
-        }
-        .relay-btn:hover {
-            border-color: #4CAF50;
-        }
-        .relay-btn.active {
-            background: #4CAF50;
-            color: white;
-            border-color: #4CAF50;
-        }
-        .sensor-grid {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 15px;
-            margin-top: 15px;
-        }
-        .sensor-card {
-            background: #f8f9fa;
-            padding: 15px;
-            border-radius: 5px;
-            text-align: center;
-        }
-        .sensor-value {
-            font-size: 1.5em;
-            font-weight: bold;
-            color: #4CAF50;
-        }
-        .help-box {
-            background: #e3f2fd;
-            padding: 15px;
-            border-radius: 5px;
             border-left: 4px solid #2196F3;
-            margin-top: 15px;
         }
-        .config-saved {
-            background: #c8e6c9;
-            padding: 10px;
-            border-radius: 5px;
-            margin-top: 10px;
+        .error {
+            background: #ffebee;
+            border-left-color: #f44336;
+        }
+        .success {
+            background: #e8f5e8;
+            border-left-color: #4CAF50;
         }
     </style>
 </head>
 <body>
-    <h1>🧪 ESP32 Dashboard Test</h1>
+    <h1>🧪 Simple ESP32 Firebase Test</h1>
     
-    <!-- Configuration Section -->
-    <div id="configSection" class="card">
-        <h2>🔧 Firebase Configuration</h2>
-        <div id="status" class="status hidden"></div>
-        
-        <div class="help-box">
-            <strong>📋 How to get Firebase credentials:</strong>
-            <ol>
-                <li>Go to <a href="https://console.firebase.google.com" target="_blank">Firebase Console</a></li>
-                <li>Select your project → ⚙️ Settings → Project settings</li>
-                <li>Scroll to "Your apps" → Click "Config"</li>
-                <li>Copy the values below</li>
-            </ol>
-        </div>
-        
-        <div class="form-group">
-            <label>🔑 Firebase API Key:</label>
-            <input type="text" id="apiKey" placeholder="AIzaSy...">
-        </div>
-        
-        <div class="form-group">
-            <label>🏢 Auth Domain:</label>
-            <input type="text" id="authDomain" placeholder="your-project.firebaseapp.com">
-        </div>
-        
-        <div class="form-group">
-            <label>🌐 Database URL:</label>
-            <input type="text" id="databaseURL" placeholder="https://your-project-default-rtdb.firebaseio.com">
-        </div>
-        
-        <div class="form-group">
-            <label>📋 Project ID:</label>
-            <input type="text" id="projectId" placeholder="your-project-id">
-        </div>
-        
-        <button onclick="saveConfig()">💾 Save Config</button>
-        <button onclick="testConnection()">🧪 Test Connection</button>
-        <button onclick="clearConfig()" style="background: #f44336;">🗑️ Clear Config</button>
+    <!-- Basic JavaScript Test -->
+    <div class="box">
+        <h3>📋 Step 1: JavaScript Test</h3>
+        <p>Click this button to test if JavaScript is working:</p>
+        <button onclick="testJS()">🧪 Test JavaScript</button>
+        <div id="jsResult"></div>
     </div>
 
-    <!-- Login Section -->
-    <div id="loginSection" class="card hidden">
-        <h2>🔐 Login</h2>
-        <div id="loginStatus" class="status hidden"></div>
-        
-        <div class="form-group">
-            <label>📧 Email:</label>
-            <input type="email" id="email" placeholder="your@example.com">
-        </div>
-        
-        <div class="form-group">
-            <label>🔐 Password:</label>
-            <input type="password" id="password" placeholder="Password">
-        </div>
-        
-        <button onclick="login()">🚪 Login</button>
-        <button onclick="backToConfig()" style="background: #757575;">⬅️ Back to Config</button>
+    <!-- Firebase SDK Loading Test -->
+    <div class="box">
+        <h3>🔥 Step 2: Firebase SDK Test</h3>
+        <p>Click to test if Firebase SDK loads:</p>
+        <button onclick="testFirebaseSDK()">📦 Test Firebase SDK</button>
+        <div id="firebaseResult"></div>
     </div>
 
-    <!-- Dashboard Section -->
-    <div id="dashboardSection" class="card hidden">
-        <h2>📱 Your Devices Dashboard</h2>
-        <div id="userInfo" class="info status"></div>
-        <button onclick="logout()" style="float: right; background: #f44336;">🚪 Logout</button>
-        <div style="clear: both;"></div>
+    <!-- Firebase Configuration Test -->
+    <div class="box">
+        <h3>⚙️ Step 3: Firebase Config Test</h3>
+        <p>Enter your Firebase credentials:</p>
         
-        <div id="devicesContainer">
-            <!-- Devices will be loaded here -->
-        </div>
+        <label>API Key:</label>
+        <input type="text" id="apiKey" placeholder="AIzaSy...">
+        
+        <label>Project ID:</label>
+        <input type="text" id="projectId" placeholder="your-project-id">
+        
+        <label>Database URL:</label>
+        <input type="text" id="databaseURL" placeholder="https://your-project-default-rtdb.firebaseio.com">
+        
+        <label>Auth Domain:</label>
+        <input type="text" id="authDomain" placeholder="your-project.firebaseapp.com">
+        
+        <button onclick="testFirebaseConfig()">🔧 Test Firebase Connection</button>
+        <div id="configResult"></div>
     </div>
 
-    <!-- Firebase SDK -->
-    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-database-compat.js"></script>
+    <!-- Authentication Test -->
+    <div class="box">
+        <h3>🔐 Step 4: Authentication Test</h3>
+        <p>Test Firebase login:</p>
+        
+        <label>Email:</label>
+        <input type="email" id="email" placeholder="your@example.com">
+        
+        <label>Password:</label>
+        <input type="password" id="password" placeholder="password">
+        
+        <button onclick="testAuth()">🚪 Test Login</button>
+        <div id="authResult"></div>
+    </div>
+
+    <!-- Database Test -->
+    <div class="box">
+        <h3>📊 Step 5: Database Test</h3>
+        <p>Test Firebase database connection:</p>
+        <button onclick="testDatabase()">💾 Test Database</button>
+        <div id="dbResult"></div>
+    </div>
+
+    <!-- Console Log Display -->
+    <div class="box">
+        <h3>📝 Console Messages</h3>
+        <div id="consoleLog" style="background: #000; color: #0f0; padding: 10px; font-family: monospace; height: 200px; overflow-y: auto;">
+            Console messages will appear here...
+        </div>
+        <button onclick="clearConsole()">🧹 Clear Console</button>
+    </div>
+
+    <!-- Firebase SDK - Using older version for better compatibility -->
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
 
     <script>
+        // Override console.log to display in page
+        const originalLog = console.log;
+        const originalError = console.error;
+        const originalWarn = console.warn;
+        
+        function addToConsole(message, type = 'log') {
+            const consoleDiv = document.getElementById('consoleLog');
+            const timestamp = new Date().toLocaleTimeString();
+            const color = type === 'error' ? '#f44336' : type === 'warn' ? '#ff9800' : '#0f0';
+            consoleDiv.innerHTML += `<div style="color: ${color};">[${timestamp}] ${message}</div>`;
+            consoleDiv.scrollTop = consoleDiv.scrollHeight;
+        }
+        
+        console.log = function(...args) {
+            addToConsole(args.join(' '), 'log');
+            originalLog.apply(console, args);
+        };
+        
+        console.error = function(...args) {
+            addToConsole('ERROR: ' + args.join(' '), 'error');
+            originalError.apply(console, args);
+        };
+        
+        console.warn = function(...args) {
+            addToConsole('WARN: ' + args.join(' '), 'warn');
+            originalWarn.apply(console, args);
+        };
+
         let firebaseApp = null;
         let auth = null;
         let database = null;
-        let currentUser = null;
 
-        // Show status messages
-        function showStatus(message, type = 'info', containerId = 'status') {
-            const statusDiv = document.getElementById(containerId);
-            statusDiv.textContent = message;
-            statusDiv.className = `status ${type}`;
-            statusDiv.classList.remove('hidden');
+        // Test 1: JavaScript functionality
+        function testJS() {
+            console.log('🧪 Testing JavaScript...');
+            const result = document.getElementById('jsResult');
+            result.innerHTML = '<div class="result success">✅ JavaScript is working! Time: ' + new Date().toLocaleString() + '</div>';
+            console.log('✅ JavaScript test passed');
+        }
+
+        // Test 2: Firebase SDK loading
+        function testFirebaseSDK() {
+            console.log('📦 Testing Firebase SDK...');
+            const result = document.getElementById('firebaseResult');
             
-            console.log(`${type.toUpperCase()}: ${message}`);
-        }
-
-        // Save Firebase configuration
-        function saveConfig() {
-            const config = {
-                apiKey: document.getElementById('apiKey').value.trim(),
-                authDomain: document.getElementById('authDomain').value.trim(),
-                databaseURL: document.getElementById('databaseURL').value.trim(),
-                projectId: document.getElementById('projectId').value.trim()
-            };
-
-            // Validate
-            if (!config.apiKey || !config.authDomain || !config.databaseURL || !config.projectId) {
-                showStatus('❌ Please fill in all fields', 'error');
-                return;
-            }
-
-            // Additional validation
-            if (!config.apiKey.startsWith('AIzaSy')) {
-                showStatus('❌ Invalid API Key format (should start with AIzaSy)', 'error');
-                return;
-            }
-
-            if (!config.authDomain.includes('.firebaseapp.com')) {
-                showStatus('❌ Invalid Auth Domain (should end with .firebaseapp.com)', 'error');
-                return;
-            }
-
-            if (!config.databaseURL.includes('firebaseio.com')) {
-                showStatus('❌ Invalid Database URL (should contain firebaseio.com)', 'error');
-                return;
-            }
-
-            // Store in localStorage
-            localStorage.setItem('firebase-config', JSON.stringify(config));
-            showStatus('✅ Configuration saved successfully!', 'success');
-            
-            console.log('Config saved:', config);
-        }
-
-        // Clear configuration
-        function clearConfig() {
-            if (confirm('⚠️ Are you sure you want to clear the configuration?')) {
-                localStorage.removeItem('firebase-config');
-                document.getElementById('apiKey').value = '';
-                document.getElementById('authDomain').value = '';
-                document.getElementById('databaseURL').value = '';
-                document.getElementById('projectId').value = '';
-                showStatus('✅ Configuration cleared', 'success');
-            }
-        }
-
-        // Test Firebase connection
-        async function testConnection() {
             try {
-                const configStr = localStorage.getItem('firebase-config');
-                if (!configStr) {
-                    showStatus('❌ No configuration found. Please save config first.', 'error');
-                    return;
-                }
-
-                const config = JSON.parse(configStr);
-                showStatus('🧪 Testing Firebase connection...', 'info');
-
-                // Initialize Firebase
-                if (firebaseApp) {
-                    await firebaseApp.delete();
+                if (typeof firebase === 'undefined') {
+                    throw new Error('Firebase SDK not loaded');
                 }
                 
-                // Add complete config
-                const fullConfig = {
-                    ...config,
-                    storageBucket: `${config.projectId}.appspot.com`,
-                    messagingSenderId: "123456789",
-                    appId: "1:123456789:web:abcdef123456"
-                };
+                console.log('Firebase object:', firebase);
+                console.log('Firebase version:', firebase.SDK_VERSION || 'Unknown');
+                
+                result.innerHTML = '<div class="result success">✅ Firebase SDK loaded successfully!<br>Version: ' + (firebase.SDK_VERSION || 'Unknown') + '</div>';
+                console.log('✅ Firebase SDK test passed');
+                
+            } catch (error) {
+                console.error('Firebase SDK test failed:', error);
+                result.innerHTML = '<div class="result error">❌ Firebase SDK failed to load: ' + error.message + '</div>';
+            }
+        }
 
-                firebaseApp = firebase.initializeApp(fullConfig);
+        // Test 3: Firebase configuration
+        async function testFirebaseConfig() {
+            console.log('🔧 Testing Firebase configuration...');
+            const result = document.getElementById('configResult');
+            
+            try {
+                const config = {
+                    apiKey: document.getElementById('apiKey').value.trim(),
+                    authDomain: document.getElementById('authDomain').value.trim(),
+                    databaseURL: document.getElementById('databaseURL').value.trim(),
+                    projectId: document.getElementById('projectId').value.trim(),
+                    storageBucket: document.getElementById('projectId').value.trim() + '.appspot.com',
+                    messagingSenderId: '123456789',
+                    appId: '1:123456789:web:abcdef123456'
+                };
+                
+                console.log('Config:', config);
+                
+                // Validate config
+                if (!config.apiKey || !config.authDomain || !config.databaseURL || !config.projectId) {
+                    throw new Error('Please fill in all configuration fields');
+                }
+                
+                if (!config.apiKey.startsWith('AIzaSy')) {
+                    throw new Error('Invalid API Key format');
+                }
+                
+                // Initialize Firebase
+                if (firebaseApp) {
+                    firebaseApp.delete();
+                }
+                
+                firebaseApp = firebase.initializeApp(config);
                 auth = firebase.auth();
                 database = firebase.database();
-
-                // Set auth persistence
-                await auth.setPersistence(firebase.auth.Auth.Persistence.LOCAL);
-
+                
+                console.log('Firebase app initialized:', firebaseApp.name);
+                
                 // Test database connection
                 const connectedRef = database.ref('.info/connected');
                 const snapshot = await connectedRef.once('value');
+                const connected = snapshot.val();
                 
-                showStatus('✅ Firebase connection successful!', 'success');
+                console.log('Database connected:', connected);
                 
-                // Show login section
-                setTimeout(() => {
-                    document.getElementById('configSection').classList.add('hidden');
-                    document.getElementById('loginSection').classList.remove('hidden');
-                }, 1000);
+                result.innerHTML = '<div class="result success">✅ Firebase configuration successful!<br>Database connected: ' + connected + '</div>';
+                console.log('✅ Firebase configuration test passed');
                 
             } catch (error) {
-                showStatus('❌ Connection failed: ' + error.message, 'error');
-                console.error('Firebase connection error:', error);
+                console.error('Firebase configuration test failed:', error);
+                result.innerHTML = '<div class="result error">❌ Firebase configuration failed: ' + error.message + '</div>';
             }
         }
 
-        // Back to config
-        function backToConfig() {
-            document.getElementById('loginSection').classList.add('hidden');
-            document.getElementById('configSection').classList.remove('hidden');
-        }
-
-        // Login function
-        async function login() {
-            const email = document.getElementById('email').value.trim();
-            const password = document.getElementById('password').value.trim();
-
-            if (!email || !password) {
-                showStatus('❌ Please enter both email and password', 'error', 'loginStatus');
-                return;
-            }
-
+        // Test 4: Authentication
+        async function testAuth() {
+            console.log('🔐 Testing authentication...');
+            const result = document.getElementById('authResult');
+            
             try {
-                showStatus('🔐 Logging in...', 'info', 'loginStatus');
+                if (!auth) {
+                    throw new Error('Firebase not configured. Please run Firebase Config test first.');
+                }
+                
+                const email = document.getElementById('email').value.trim();
+                const password = document.getElementById('password').value.trim();
+                
+                if (!email || !password) {
+                    throw new Error('Please enter both email and password');
+                }
+                
+                console.log('Attempting login for:', email);
                 
                 const userCredential = await auth.signInWithEmailAndPassword(email, password);
-                currentUser = userCredential.user;
+                const user = userCredential.user;
                 
-                showStatus('✅ Login successful!', 'success', 'loginStatus');
+                console.log('Login successful:', user.email);
                 
-                // Show dashboard
-                setTimeout(() => {
-                    document.getElementById('loginSection').classList.add('hidden');
-                    document.getElementById('dashboardSection').classList.remove('hidden');
-                    loadDashboard();
-                }, 1000);
+                result.innerHTML = '<div class="result success">✅ Authentication successful!<br>User: ' + user.email + '<br>UID: ' + user.uid + '</div>';
+                console.log('✅ Authentication test passed');
                 
             } catch (error) {
-                let errorMessage = error.message;
-                if (error.code === 'auth/user-not-found') {
-                    errorMessage = 'User not found. Please check your email address.';
-                } else if (error.code === 'auth/wrong-password') {
-                    errorMessage = 'Incorrect password. Please try again.';
-                } else if (error.code === 'auth/invalid-email') {
-                    errorMessage = 'Invalid email address format.';
+                console.error('Authentication test failed:', error);
+                result.innerHTML = '<div class="result error">❌ Authentication failed: ' + error.message + '</div>';
+            }
+        }
+
+        // Test 5: Database operations
+        async function testDatabase() {
+            console.log('💾 Testing database operations...');
+            const result = document.getElementById('dbResult');
+            
+            try {
+                if (!database) {
+                    throw new Error('Firebase not configured. Please run Firebase Config test first.');
                 }
                 
-                showStatus('❌ Login failed: ' + errorMessage, 'error', 'loginStatus');
-                console.error('Login error:', error);
-            }
-        }
-
-        // Logout function
-        async function logout() {
-            try {
-                await auth.signOut();
-                currentUser = null;
+                if (!auth.currentUser) {
+                    throw new Error('Not authenticated. Please run Authentication test first.');
+                }
                 
-                // Reset to config section
-                document.getElementById('dashboardSection').classList.add('hidden');
-                document.getElementById('loginSection').classList.add('hidden');
-                document.getElementById('configSection').classList.remove('hidden');
+                console.log('Testing database read/write...');
                 
-                showStatus('✅ Logged out successfully', 'success');
-            } catch (error) {
-                console.error('Logout error:', error);
-            }
-        }
-
-        // Load dashboard data
-        async function loadDashboard() {
-            try {
-                // Show user info
-                document.getElementById('userInfo').innerHTML = `
-                    👤 Logged in as: <strong>${currentUser.email}</strong><br>
-                    🔄 Loading devices...
-                `;
-
-                // Listen for devices
-                database.ref('devices').on('value', (snapshot) => {
-                    const devices = snapshot.val() || {};
-                    displayDevices(devices);
-                    
-                    // Update user info with device count
-                    const userDeviceCount = Object.values(devices).filter(device => 
-                        device.owner_email === currentUser.email
-                    ).length;
-                    
-                    document.getElementById('userInfo').innerHTML = `
-                        👤 Logged in as: <strong>${currentUser.email}</strong><br>
-                        📱 Devices found: <strong>${userDeviceCount}</strong>
-                    `;
+                // Test write
+                const testRef = database.ref('test/' + Date.now());
+                await testRef.set({
+                    message: 'Hello from ESP32 test',
+                    timestamp: Date.now(),
+                    user: auth.currentUser.email
                 });
-
-            } catch (error) {
-                console.error('Dashboard load error:', error);
-                showStatus('❌ Failed to load dashboard: ' + error.message, 'error');
-            }
-        }
-
-        // Display devices
-        function displayDevices(allDevices) {
-            const container = document.getElementById('devicesContainer');
-            
-            // Filter devices for current user
-            const userDevices = {};
-            for (const deviceId in allDevices) {
-                const device = allDevices[deviceId];
-                if (device.owner_email === currentUser.email) {
-                    userDevices[deviceId] = device;
-                }
-            }
-
-            const deviceCount = Object.keys(userDevices).length;
-            
-            if (deviceCount === 0) {
-                container.innerHTML = `
-                    <div class="device-card">
-                        <h3>📱 No Devices Found</h3>
-                        <p>Your ESP32 devices will appear here once they're configured.</p>
-                        <div class="help-box">
-                            <strong>🔧 To add your first device:</strong>
-                            <ol>
-                                <li>Power on your ESP32 device</li>
-                                <li>Connect to WiFi: <strong>ESP32_HomeAutomation_Setup</strong></li>
-                                <li>Password: <strong>homesetup123</strong></li>
-                                <li>Go to: <strong>http://192.168.4.1</strong></li>
-                                <li>Use your email: <strong>${currentUser.email}</strong></li>
-                                <li>Complete all 3 setup tabs</li>
-                            </ol>
-                        </div>
-                    </div>
-                `;
-                return;
-            }
-
-            let html = `<h3>📊 Found ${deviceCount} device(s)</h3>`;
-            
-            for (const deviceId in userDevices) {
-                const device = userDevices[deviceId];
-                html += createDeviceCard(deviceId, device);
-            }
-            
-            container.innerHTML = html;
-        }
-
-        // Create device card HTML
-        function createDeviceCard(deviceId, device) {
-            const now = Date.now() / 1000;
-            const lastSeen = device.data ? device.data.timestamp : 0;
-            const isOnline = lastSeen > 0 && (now - lastSeen) < 120;
-            
-            let html = `
-                <div class="device-card">
-                    <div class="device-title">
-                        📱 ${device.name || deviceId}
-                        <span style="float: right; font-size: 0.8em; color: ${isOnline ? 'green' : 'red'}">
-                            ${isOnline ? '🟢 Online' : '🔴 Offline'}
-                        </span>
-                    </div>
-                    <p>📍 <strong>Location:</strong> ${device.location || 'Unknown Location'}</p>
-                    <p>👤 <strong>Owner:</strong> ${device.owner_email}</p>
-                    <p>🆔 <strong>Device ID:</strong> ${deviceId}</p>
-                    <p>⏰ <strong>Last Seen:</strong> ${lastSeen > 0 ? new Date(lastSeen * 1000).toLocaleString() : 'Never'}</p>
-            `;
-
-            if (device.data) {
-                // Relays
-                if (device.data.relays && Array.isArray(device.data.relays)) {
-                    html += `
-                        <h4>⚡ Relay Controls</h4>
-                        <div class="relay-grid">
-                    `;
-                    device.data.relays.forEach((relay, index) => {
-                        html += `
-                            <div class="relay-btn ${relay.state ? 'active' : ''}" 
-                                 onclick="toggleRelay('${deviceId}', ${index})"
-                                 title="Click to toggle Relay ${index + 1}">
-                                <strong>Relay ${index + 1}</strong><br>
-                                ${relay.state ? '🟢 ON' : '🔴 OFF'}
-                            </div>
-                        `;
-                    });
-                    html += `</div>`;
-                }
-
-                // PWM Control
-                if (device.data.pwm) {
-                    html += `
-                        <h4>💡 PWM Dimming</h4>
-                        <p>Brightness: <strong>${device.data.pwm.brightness}%</strong></p>
-                        <p>Active Relay: <strong>${device.data.pwm.active_relay >= 0 ? device.data.pwm.active_relay + 1 : 'None'}</strong></p>
-                    `;
-                }
-
-                // Sensors
-                if (device.data.sensors) {
-                    html += `
-                        <h4>🌡️ Environmental Sensors</h4>
-                        <div class="sensor-grid">
-                            <div class="sensor-card">
-                                <div class="sensor-value">${device.data.sensors.temperature?.toFixed(1) || '—'}°C</div>
-                                <div>🌡️ Temperature</div>
-                            </div>
-                            <div class="sensor-card">
-                                <div class="sensor-value">${device.data.sensors.humidity?.toFixed(1) || '—'}%</div>
-                                <div>💧 Humidity</div>
-                            </div>
-                        `;
-                    
-                    if (device.data.sensors.light_lux !== undefined) {
-                        html += `
-                            <div class="sensor-card">
-                                <div class="sensor-value">${device.data.sensors.light_lux?.toFixed(0) || '—'}</div>
-                                <div>☀️ Light (lux)</div>
-                            </div>
-                        `;
-                    }
-                    
-                    if (device.data.sensors.pressure_hpa !== undefined) {
-                        html += `
-                            <div class="sensor-card">
-                                <div class="sensor-value">${device.data.sensors.pressure_hpa?.toFixed(1) || '—'}</div>
-                                <div>🌪️ Pressure (hPa)</div>
-                            </div>
-                        `;
-                    }
-                    
-                    html += `</div>`;
-                }
-            } else {
-                html += `
-                    <div class="help-box">
-                        <p>⏳ <strong>Waiting for device data...</strong></p>
-                        <p>Device is registered but hasn't sent data yet.</p>
-                    </div>
-                `;
-            }
-
-            html += `</div>`;
-            return html;
-        }
-
-        // Toggle relay
-        async function toggleRelay(deviceId, relayIndex) {
-            try {
-                const relayRef = database.ref(`devices/${deviceId}/data/relays/${relayIndex}/state`);
-                const snapshot = await relayRef.once('value');
-                const currentState = snapshot.val() || false;
                 
-                await relayRef.set(!currentState);
+                console.log('Database write successful');
                 
-                showStatus(`✅ Relay ${relayIndex + 1} ${!currentState ? 'turned ON' : 'turned OFF'}`, 'success');
-                console.log(`Device ${deviceId}: Relay ${relayIndex} toggled to ${!currentState}`);
+                // Test read
+                const snapshot = await testRef.once('value');
+                const data = snapshot.val();
+                
+                console.log('Database read successful:', data);
+                
+                // Test devices read
+                const devicesSnapshot = await database.ref('devices').once('value');
+                const devices = devicesSnapshot.val() || {};
+                const deviceCount = Object.keys(devices).length;
+                
+                console.log('Found devices:', deviceCount);
+                
+                result.innerHTML = '<div class="result success">✅ Database test successful!<br>Read/Write: OK<br>Devices found: ' + deviceCount + '</div>';
+                console.log('✅ Database test passed');
                 
             } catch (error) {
-                showStatus('❌ Failed to toggle relay: ' + error.message, 'error');
-                console.error('Relay toggle error:', error);
+                console.error('Database test failed:', error);
+                result.innerHTML = '<div class="result error">❌ Database test failed: ' + error.message + '</div>';
             }
         }
 
-        // Load saved config on page load
-        window.addEventListener('load', () => {
-            console.log('🧪 ESP32 Dashboard Test loaded');
-            
-            const configStr = localStorage.getItem('firebase-config');
-            if (configStr) {
-                try {
-                    const config = JSON.parse(configStr);
-                    document.getElementById('apiKey').value = config.apiKey || '';
-                    document.getElementById('authDomain').value = config.authDomain || '';
-                    document.getElementById('databaseURL').value = config.databaseURL || '';
-                    document.getElementById('projectId').value = config.projectId || '';
-                    
-                    showStatus('✅ Saved configuration loaded', 'success');
-                } catch (error) {
-                    console.error('Error loading saved config:', error);
-                    showStatus('⚠️ Error loading saved configuration', 'error');
-                }
-            } else {
-                showStatus('ℹ️ No saved configuration found. Please enter your Firebase credentials.', 'info');
-            }
-        });
+        // Clear console display
+        function clearConsole() {
+            document.getElementById('consoleLog').innerHTML = 'Console cleared...<br>';
+        }
 
-        console.log('🧪 ESP32 Dashboard Test script loaded successfully');
+        // Initialize
+        console.log('🚀 Simple ESP32 Firebase Test loaded');
+        console.log('Current URL:', window.location.href);
+        console.log('User Agent:', navigator.userAgent);
+        
+        // Auto-test JavaScript on load
+        setTimeout(() => {
+            testJS();
+            testFirebaseSDK();
+        }, 1000);
     </script>
 </body>
 </html>
