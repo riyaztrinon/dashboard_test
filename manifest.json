@@ -10,6 +10,12 @@
       "url": "https://trinon-ota-artifacts.onrender.com/trinon_enterprise_firmware-1.0.1.bin",
       "sha256": "3f4533b07121b9a7ebc846429e082cb0048e3f7740dbc35adcf5bdb394052cec",
       "releaseNotes": "OTA test 1.0.1"
+    },
+    {
+      "version": "1.0.2",
+      "url": "https://trinon-ota-artifacts.onrender.com/trinon_enterprise_firmware-1.0.2.bin",
+      "sha256": "f0891061b0eec24866a25e6fe12881fa35974cd380ee5e2151f3f7185811931c",
+      "releaseNotes": "OTA robustness fix"
     }
   ]
 }
