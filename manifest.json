@@ -1,27 +1,13 @@
 {
   "schema": 1,
   "channel": "stable",
-  "allowedFirmwareHosts": [
-    "trinon-ota-artifacts.onrender.com"
-  ],
+  "allowedFirmwareHosts": ["trinon-ota-artifacts.onrender.com"],
   "releases": [
     {
-      "version": "1.0.1",
-      "url": "https://trinon-ota-artifacts.onrender.com/trinon_enterprise_firmware-1.0.1.bin",
-      "sha256": "3f4533b07121b9a7ebc846429e082cb0048e3f7740dbc35adcf5bdb394052cec",
-      "releaseNotes": "OTA test 1.0.1"
-    },
-    {
-      "version": "1.0.2",
-      "url": "https://trinon-ota-artifacts.onrender.com/trinon_enterprise_firmware-1.0.2.bin",
-      "sha256": "f0891061b0eec24866a25e6fe12881fa35974cd380ee5e2151f3f7185811931c",
-      "releaseNotes": "OTA robustness fix"
-    },
-    {
-      "version": "1.0.3",
-      "url": "https://trinon-ota-artifacts.onrender.com/trinon_enterprise_firmware-1.0.3.bin",
-      "sha256": "a6e9e917d35b04e3f13b1856cba39f722fdbccc94309ab3f88d3370a9b1afa78",
-      "releaseNotes": "OTA 1.0.3 stability"
+      "version": "1.0.4",
+      "url": "https://trinon-ota-artifacts.onrender.com/trinon_enterprise_firmware-1.0.4.bin",
+      "sha256": "99b528b4baaa0bc6f9d617645600450c3548a59612f04f80dc7e33b720ebb9c5",
+      "releaseNotes": "OTA test release"
     }
   ]
 }
