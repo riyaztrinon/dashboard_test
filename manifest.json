@@ -1,13 +1,5 @@
 {
-  "schema": 1,
-  "channel": "stable",
-  "allowedFirmwareHosts": ["trinon-ota-artifacts.onrender.com"],
-  "releases": [
-    {
-      "version": "1.0.4",
-      "url": "https://trinon-ota-artifacts.onrender.com/trinon_enterprise_firmware-1.0.4.bin",
-      "sha256": "99b528b4baaa0bc6f9d617645600450c3548a59612f04f80dc7e33b720ebb9c5",
-      "releaseNotes": "OTA test release"
-    }
-  ]
+  "schema": 2,
+  "payload": "eyJzY2hlbWEiOjEsImNoYW5uZWwiOiJzdGFibGUiLCJhbGxvd2VkRmlybXdhcmVIb3N0cyI6WyJ0cmlub24tb3RhLWFydGlmYWN0cy5vbnJlbmRlci5jb20iXSwicmVsZWFzZXMiOlt7InZlcnNpb24iOiIxLjAuNSIsInVybCI6Imh0dHBzOi8vdHJpbm9uLW90YS1hcnRpZmFjdHMub25yZW5kZXIuY29tL3RyaW5vbl9lbnRlcnByaXNlX2Zpcm13YXJlLXRyaW5vbl84Y2hfZnVsbC0xLjAuNS5iaW4iLCJzaGEyNTYiOiI5ZDQ5OTgyYTk2Y2EzZjEwYTU2NmJkNzA1ZTYxMzQxMjE3YjE2NGZiMTE4NTQ2ZTMzNjgzNWNjZWExY2E5NWMwIiwiaHdfc2t1IjoidHJpbm9uXzhjaF9mdWxsIiwicmVsZWFzZU5vdGVzIjoiRmFuIGRpbW1lciBhdXRvLXNlbGVjdHMgbm9ybWFsIG1haW5zIGFuZCBjaGVhcC1pbnZlcnRlciB6ZXJvLWNyb3NzLiJ9XX0=",
+  "sig": "jNFtkp7S8JY5ewBGAgWOcJClH1y5SWXi5gjCs0ysycCFz83mKBS5RLouJEzAmPmizH8t62pgqIC9XermtS9MCg=="
 }
